@@ -1,0 +1,30 @@
+            ┌───────────────┐
+uart_rx --->│   UART RX     │
+(serial in) │  (rx_clk)     │
+            │               │
+            │ rx_data[7:0]  │
+            │ rx_valid      │
+            └───────┬───────┘
+                    │  write enable
+                    │  (rx_clk domain)
+                    ▼
+        ┌───────────────────────────┐
+        │      ASYNC FIFO            │
+        │                            │
+        │  • Dual-port memory        │
+        │  • Gray-coded pointers     │
+        │  • CDC-safe sync           │
+        │                            │
+        │ wr_clk = rx_clk            │
+        │ rd_clk = tx_clk            │
+        └───────────┬───────────────┘
+                    │  read data
+                    │  (tx_clk domain)
+                    ▼
+            ┌───────────────┐
+uart_tx <---│   UART TX     │
+(serial out)│  (tx_clk)     │
+            │               │
+            │ tx_data[7:0]  │
+            │ tx_valid      │
+            └───────────────┘
